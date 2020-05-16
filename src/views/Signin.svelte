@@ -19,8 +19,24 @@
 </style>
 
 <script>
+  import { getClient, mutate } from 'svelte-apollo'
+  import { SIGNIN } from '../resources/mutaions'
+
   import Card from '../components/Card.svelte'
   import SigninForm from '../components/SigninForm.svelte'
+
+  const client = getClient()
+
+  async function signin(email, password) {
+    try {
+      await mutate(client, {
+        mutation: SIGNIN,
+        variables: { email, password },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 </script>
 
 <div class="auth-container h-100 w-100">
@@ -31,7 +47,9 @@
         <img src="/assets/img/signin.png" alt="signin.png" />
       </div>
       <div class="col">
-        <SigninForm />
+        <SigninForm
+          onSubmit={({ email, password }) => signin(email, password)}
+        />
       </div>
     </div>
   </Card>

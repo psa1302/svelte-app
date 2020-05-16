@@ -1,31 +1,49 @@
+<style>
+  .message {
+    color: red;
+  }
+</style>
+
 <script>
   import { navigate } from 'svelte-routing'
+  import { Form, Input, Select, Choice } from 'sveltejs-forms'
+  import * as yup from 'yup'
+
+  export let onSubmit
+
+  const schema = yup.object().shape({
+    email: yup.string().required().email(),
+    password: yup.string().min(4),
+  })
+
+  const handleSubmit = ({ detail: { values, setSubmitting, resetForm } }) => {
+    setSubmitting(false)
+    onSubmit({ ...values })
+  }
 </script>
 
-<form>
+<Form
+  {schema}
+  validateOnBlur={false}
+  validateOnChange={false}
+  on:submit={handleSubmit}
+  let:isSubmitting
+  let:isValid
+>
   <div class="form-group">
-    <input
-      placeholder="Email"
-      type="email"
-      class="form-control"
-      id="inputEmail4"
-    />
+    <Input name="email" class="form-control" placeholder="Email" />
   </div>
   <div class="form-group">
-    <input
-      placeholder="Password"
+    <Input
+      name="password"
       type="password"
       class="form-control"
-      id="inputPassword4"
+      placeholder="Password"
     />
   </div>
-  <div class="form-group">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="gridCheck" />
-      <label class="form-check-label" for="gridCheck">Remember Me</label>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Sign in</button>
+  <button type="submit" class="btn btn-primary" disabled={isSubmitting}>
+    Sign in
+  </button>
   <span>Or</span>
   <button
     type="button"
@@ -34,4 +52,4 @@
   >
     Sign up
   </button>
-</form>
+</Form>

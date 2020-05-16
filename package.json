@@ -22,6 +22,8 @@
     "sirv-cli": "^0.4.4",
     "svelte-apollo": "^0.3.0",
     "svelte-material-ui": "^1.0.0-beta.21",
-    "svelte-routing": "^1.4.2"
+    "svelte-routing": "^1.4.2",
+    "sveltejs-forms": "^2.0.1",
+    "yup": "^0.28.5"
   }
 }

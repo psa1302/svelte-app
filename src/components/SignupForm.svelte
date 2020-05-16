@@ -1,49 +1,63 @@
 <script>
   import { navigate } from 'svelte-routing'
+  import { Form, Input, Select, Choice } from 'sveltejs-forms'
+  import * as yup from 'yup'
+
+  export let onSubmit
+
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    email: yup.string().required().email(),
+    handle: yup.string().required(),
+    password: yup.string().min(4),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match'),
+  })
+
+  const handleSubmit = ({ detail: { values, setSubmitting, resetForm } }) => {
+    const { passwordConfirmation, ...rest } = values
+    setSubmitting(false)
+    onSubmit({ ...rest })
+  }
 </script>
 
-<form>
+<Form
+  {schema}
+  validateOnBlur={false}
+  validateOnChange={false}
+  on:submit={handleSubmit}
+  let:isSubmitting
+  let:isValid
+>
   <div class="form-group">
-    <input placeholder="Name" class="form-control" id="inputName" />
+    <Input name="name" class="form-control" placeholder="Name" />
   </div>
   <div class="form-group">
-    <input
-      placeholder="Email"
-      type="email"
+    <Input name="email" class="form-control" placeholder="Email" />
+  </div>
+  <div class="form-group">
+    <Input name="handle" class="form-control" placeholder="Username" />
+  </div>
+  <div class="form-group">
+    <Input
+      name="password"
+      type="password"
       class="form-control"
-      id="inputEmail4"
-    />
-  </div>
-  <div class="form-group">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <div class="input-group-text">@</div>
-      </div>
-      <input
-        type="text"
-        class="form-control"
-        id="inlineFormInputGroup"
-        placeholder="Username"
-      />
-    </div>
-  </div>
-  <div class="form-group">
-    <input
       placeholder="Password"
-      type="password"
-      class="form-control"
-      id="inputPassword4"
     />
   </div>
   <div class="form-group">
-    <input
-      placeholder="Re-Enter Password"
+    <Input
+      name="passwordConfirmation"
       type="password"
       class="form-control"
-      id="rePass"
+      placeholder="Confirm Password"
     />
   </div>
-  <button type="submit" class="btn btn-primary">Sign Up</button>
+  <button type="submit" class="btn btn-primary" disabled={isSubmitting}>
+    Sign up
+  </button>
   <span>Or</span>
   <button
     type="button"
@@ -52,4 +66,4 @@
   >
     Sign in
   </button>
-</form>
+</Form>
