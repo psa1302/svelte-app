@@ -1,0 +1,5 @@
+export const HOME = '/'
+export const SIGNUP = '/signup'
+export const SIGNIN = '/signin'
+export const PUBLIC_WILDCARD = '*'
+export const PRIVATE_WILDCARD = '*'
