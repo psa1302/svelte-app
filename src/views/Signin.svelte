@@ -20,7 +20,7 @@
 
 <script>
   import { getClient, mutate } from 'svelte-apollo'
-  import { SIGNIN } from '../resources/mutaions'
+  import { SIGNIN } from '../resources/mutations'
 
   import Card from '../components/Card.svelte'
   import SigninForm from '../components/SigninForm.svelte'
