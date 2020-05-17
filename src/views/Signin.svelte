@@ -24,15 +24,17 @@
 
   import Card from '../components/Card.svelte'
   import SigninForm from '../components/SigninForm.svelte'
+  import { user } from '../resources/stores'
 
   const client = getClient()
 
   async function signin(email, password) {
     try {
-      await mutate(client, {
+      const data = await mutate(client, {
         mutation: SIGNIN,
         variables: { email, password },
       })
+      user.set(data.user)
     } catch (error) {
       console.log(error)
     }
